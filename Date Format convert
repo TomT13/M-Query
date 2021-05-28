@@ -1,0 +1,2 @@
+// Convert any Date to format YYYYMM
+Table.AddColumn(Custom2, "Custom", each Date.ToText([Date],"yyyyMM"))
