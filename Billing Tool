@@ -1,0 +1,127 @@
+// Tool for automation of billing. This reports pivots into 12 month columns and for each customer entity an amount will show if a customer should be billed.
+
+let
+    // Source omitted
+
+// Monthly Fee Currency    
+    #"Added Conditional Column" = 
+    Table.AddColumn(#"Renamed Columns1", "MonthlyFeeCurrency",    
+each if [Frequency] = "M"   then Number.Round([Fee],0)
+else if [Frequency] = "Q"   then Number.Round( ([Fee] / 3),0)
+else if [Frequency] = "B"   then Number.Round( ([Fee] / 2),0)
+else if [Frequency] = "A"   then Number.Round( ([Fee] / 12),0)
+else null, Number.Type),
+
+    
+// April (4)
+    #"Added Conditional Column(4)" = 
+    Table.AddColumn(#"Added Conditional Column", "AprilBill", 
+each if [Frequency] = "M"                                                                        then [Fee]    
+else if [Frequency] = "Q" and List.Contains({1,4,7,10},Date.Month([StartDate])) =       true     then [Fee] 
+else if [Frequency] = "B" and List.Contains({2,4,6,8,10,12},Date.Month([StartDate])) =  true     then [Fee]    
+else if [Frequency] = "A" and List.Contains({4},Date.Month([StartDate])) =              true     then [Fee]
+else null, Number.Type),
+
+// May (5)
+    #"Added Conditional Column(5)" = 
+    Table.AddColumn(#"Added Conditional Column(4)", "MayBill", 
+each if [Frequency] = "M"                                                                        then [Fee]    
+else if [Frequency] = "Q" and List.Contains({2,5,8,11},Date.Month([StartDate])) =       true     then [Fee] 
+else if [Frequency] = "B" and List.Contains({1,3,5,7,9,11},Date.Month([StartDate])) =   true     then [Fee]    
+else if [Frequency] = "A" and List.Contains({5},Date.Month([StartDate])) =              true     then [Fee]
+else null, Number.Type),
+
+// June (6)
+    #"Added Conditional Column(6)" = 
+    Table.AddColumn(#"Added Conditional Column(5)", "JuneBill", 
+each if [Frequency] = "M"                                                                        then [Fee]    
+else if [Frequency] = "Q" and List.Contains({3,6,9,12},Date.Month([StartDate])) =       true     then [Fee] 
+else if [Frequency] = "B" and List.Contains({2,4,6,8,10,12},Date.Month([StartDate])) =  true     then [Fee]    
+else if [Frequency] = "A" and List.Contains({6},Date.Month([StartDate])) =              true     then [Fee]
+else null, Number.Type),
+
+// July (7)
+    #"Added Conditional Column(7)" = 
+    Table.AddColumn(#"Added Conditional Column(6)", "JulyBill", 
+each if [Frequency] = "M"                                                                        then [Fee]    
+else if [Frequency] = "Q" and List.Contains({4,7,10,1},Date.Month([StartDate])) =       true     then [Fee] 
+else if [Frequency] = "B" and List.Contains({1,3,5,7,9,11},Date.Month([StartDate])) =   true     then [Fee]    
+else if [Frequency] = "A" and List.Contains({7},Date.Month([StartDate])) =              true     then [Fee]
+else null, Number.Type),
+
+// August (8)
+    #"Added Conditional Column(8)" = 
+    Table.AddColumn(#"Added Conditional Column(7)", "AugustBill", 
+each if [Frequency] = "M"                                                                        then [Fee]    
+else if [Frequency] = "Q" and List.Contains({5,8,11,2},Date.Month([StartDate])) =       true     then [Fee] 
+else if [Frequency] = "B" and List.Contains({2,4,6,8,10,12},Date.Month([StartDate])) =  true     then [Fee]    
+else if [Frequency] = "A" and List.Contains({8},Date.Month([StartDate])) =              true     then [Fee]
+else null, Number.Type),
+
+// September (9)
+    #"Added Conditional Column(9)" = 
+    Table.AddColumn(#"Added Conditional Column(8)", "SeptemberBill", 
+each if [Frequency] = "M"                                                                        then [Fee]    
+else if [Frequency] = "Q" and List.Contains({6,9,12,3},Date.Month([StartDate])) =       true     then [Fee] 
+else if [Frequency] = "B" and List.Contains({1,3,5,7,9,11},Date.Month([StartDate])) =   true     then [Fee]    
+else if [Frequency] = "A" and List.Contains({9},Date.Month([StartDate])) =              true     then [Fee]
+else null, Number.Type),
+
+// October (10)
+    #"Added Conditional Column(10)" = 
+    Table.AddColumn(#"Added Conditional Column(9)", "OctoberBill", 
+each if [Frequency] = "M"                                                                        then [Fee]    
+else if [Frequency] = "Q" and List.Contains({7,10,1,4},Date.Month([StartDate])) =       true     then [Fee] 
+else if [Frequency] = "B" and List.Contains({2,4,6,8,10,12},Date.Month([StartDate])) =  true     then [Fee]    
+else if [Frequency] = "A" and List.Contains({10},Date.Month([StartDate])) =             true     then [Fee]
+else null, Number.Type),
+
+// November (11)
+    #"Added Conditional Column(11)" = 
+    Table.AddColumn(#"Added Conditional Column(10)", "NovemberBill", 
+each if [Frequency] = "M"                                                                        then [Fee]    
+else if [Frequency] = "Q" and List.Contains({8,11,2,5},Date.Month([StartDate])) =       true     then [Fee] 
+else if [Frequency] = "B" and List.Contains({1,3,5,7,9,11},Date.Month([StartDate])) =   true     then [Fee]    
+else if [Frequency] = "A" and List.Contains({11},Date.Month([StartDate])) =             true     then [Fee]
+else null, Number.Type),
+
+// December (12)
+    #"Added Conditional Column(12)" = 
+    Table.AddColumn(#"Added Conditional Column(11)", "DecemberBill", 
+each if [Frequency] = "M"                                                                        then [Fee]    
+else if [Frequency] = "Q" and List.Contains({9,12,3,6},Date.Month([StartDate])) =       true     then [Fee] 
+else if [Frequency] = "B" and List.Contains({2,4,6,8,10,12},Date.Month([StartDate])) =  true     then [Fee]    
+else if [Frequency] = "A" and List.Contains({12},Date.Month([StartDate])) =             true     then [Fee]
+else null, Number.Type),
+
+// January (01)
+    #"Added Conditional Column(01)" = 
+    Table.AddColumn(#"Added Conditional Column(12)", "JanuaryBill", 
+each if [Frequency] = "M"                                                                        then [Fee]    
+else if [Frequency] = "Q" and List.Contains({10,1,4,7},Date.Month([StartDate])) =       true     then [Fee] 
+else if [Frequency] = "B" and List.Contains({1,3,5,7,9,11},Date.Month([StartDate])) =   true     then [Fee]    
+else if [Frequency] = "A" and List.Contains({1},Date.Month([StartDate])) =              true     then [Fee]
+else null, Number.Type),
+
+// February (02)
+    #"Added Conditional Column(02)" = 
+    Table.AddColumn(#"Added Conditional Column(01)", "FebruaryBill", 
+each if [Frequency] = "M"                                                                        then [Fee]    
+else if [Frequency] = "Q" and List.Contains({11,2,5,8},Date.Month([StartDate])) =       true     then [Fee] 
+else if [Frequency] = "B" and List.Contains({2,4,6,8,10,12},Date.Month([StartDate])) =  true     then [Fee]    
+else if [Frequency] = "A" and List.Contains({2},Date.Month([StartDate])) =              true     then [Fee]
+else null, Number.Type),
+
+// March (03)
+    #"Added Conditional Column(03)" = 
+    Table.AddColumn(#"Added Conditional Column(02)", "MarchBill", 
+each if [Frequency] = "M"                                                                        then [Fee]    
+else if [Frequency] = "Q" and List.Contains({12,3,6,9},Date.Month([StartDate])) =       true     then [Fee] 
+else if [Frequency] = "B" and List.Contains({1,3,5,7,9,11},Date.Month([StartDate])) =   true     then [Fee]    
+else if [Frequency] = "A" and List.Contains({3},Date.Month([StartDate])) =              true     then [Fee]
+else null, Number.Type),
+    
+// Additional transformation columns omitted
+	
+in
+    #"Merged Columns"
