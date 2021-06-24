@@ -1,0 +1,6 @@
+// Enter Start and End dates into a Table
+// Create custom column
+   
+= Table.AddColumn(#"Changed Type", "Custom", each {Number.From([Start])..Number.From([End])})
+
+// Expand List and convert to Date
